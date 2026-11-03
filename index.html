@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07509B">
+  <meta name="description" content="راه من؛ راهنمای تعاملی فازها، ساختمان‌ها و کلاس‌های دانشگاه ملی مهارت شریعتی. نمونه اولیه آفلاین.">
+  <title>راه من | راهنمای تعاملی دانشگاه شریعتی</title>
+  <link rel="icon" href="assets/university-logo.webp" type="image/webp">
+  <link rel="stylesheet" href="styles.css">
+  <script src="data.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="offline-ribbon"><span class="live-dot"></span> نمونه اولیه آفلاین <span class="ribbon-divider">|</span> جانمایی داخلی، مسیرها و مشخصات اساتید فعلا نمایشی‌اند</div>
+  <header class="site-header" id="top">
+    <div class="header-inner container">
+      <a class="brand" href="#home" aria-label="راه من - خانه">
+        <span class="brand-mark">↗</span>
+        <span class="brand-title"><strong>راهِ من</strong><small>همراهت توی دانشگاه</small></span>
+      </a>
+      <nav class="main-nav" aria-label="ناوبری اصلی">
+        <button class="nav-link active" data-nav="map" type="button">نقشه تعاملی</button>
+        <button class="nav-link" data-nav="explore" type="button">ساختمان‌ها</button>
+        <button class="nav-link" data-nav="faq" type="button">سوال‌های پرتکرار</button>
+        <button class="nav-link" data-nav="about" type="button">درباره راهنما</button>
+      </nav>
+      <div class="header-badge"><img src="assets/university-logo.webp" alt="نشان دانشگاه ملی مهارت شریعتی"><span>دانشگاه ملی مهارت<br><b>شریعتی تهران</b></span></div>
+      <button class="mobile-nav-toggle" id="navToggle" type="button" aria-label="باز کردن فهرست" aria-expanded="false">☰</button>
+    </div>
+  </header>
+  <main>
+    <section class="hero container" id="home">
+      <div class="hero-copy">
+        <span class="eyebrow"><span class="star-small">✦</span> گم شدی؟ راهش با ما!</span>
+        <h1>دانشگاه بزرگه،<br><em>پیدا کردن راهت</em> آسونه.</h1>
+        <p>از درِ اصلی تا کلاس و آتلیه، هر جا بخوای بری مسیرت رو روی نقشه پیدا کن؛ بدون اینکه از کسی آدرس بپرسی.</p>
+        <div class="hero-actions"><button class="btn btn-primary" id="heroMapBtn" type="button">نقشه رو باز کن <span>←</span></button><button class="btn btn-ghost" id="heroFaqBtn" type="button">یه سوال دارم</button></div>
+        <div class="hero-trust"><span>◉ ۴ فاز دانشگاه</span><span>◉ نقشه چندسطحی</span><span>◉ بدون نیاز به اینترنت</span></div>
+      </div>
+      <div class="hero-art" aria-label="مسکات راهنمای دانشگاه"><div class="hero-art-orbit"></div><span class="float-star s1">✿</span><span class="float-star s2">✦</span><img src="assets/bird-guide.webp" alt="پرنده آبی راهنمای دانشگاه با کیف دارای نشان دانشگاه"><span class="bird-bubble">بیا بریم! ↖</span></div>
+    </section>
+    <div class="container mission-note"><span>✳</span><strong>نسخه نمایشی برای دفاع دانشگاهی</strong><span>اطلاعات چهار فاز از توضیحات دانشجو و نقشه ارسالی الهام گرفته شده؛ آدرس اتاق‌ها، دفترها، اساتید و مسیرهای جزئی تا بازدید میدانی معتبر نیست.</span></div>
+
+    <section class="section container map-section" id="map-section">
+      <div class="section-head"><div><div class="section-kicker">۰۱ / پیدا کردن مسیر</div><h2>نقشه تعاملی دانشگاه <span class="heading-spark">✳</span></h2><p>روی هر فاز یا ساختمان برو تا اطلاعاتش رو ببینی؛ برای جزئیات روش کلیک کن.</p></div><span class="pill-outline">نقشه کاملا SVG و کدنویسی‌شده</span></div>
+      <div class="workspace">
+        <aside class="search-panel">
+          <div class="panel-heading"><div><span class="panel-kicker">مقصدت کجاست؟</span><h3>بریم پیداش کنیم <span>✦</span></h3></div><img src="assets/bird-map.webp" alt="پرنده با نقشه" class="panel-bird"></div>
+          <label for="searchInput" class="field-label">جست‌وجوی کلاس، ساختمان یا خدمت</label>
+          <div class="search-field"><span aria-hidden="true">⌕</span><input type="search" id="searchInput" placeholder="مثلا ترنج، آموزش، آتلیه، T-203..." autocomplete="off" aria-label="جست‌وجوی مقصد"></div>
+          <div class="search-results" id="searchResults" aria-live="polite"></div>
+          <label for="originSelect" class="field-label">از کجا حرکت می‌کنی؟</label>
+          <select id="originSelect" class="control-select" aria-label="انتخاب مبدا"></select>
+          <div class="select-helper">مسیر از شبکه پیاده‌روی <b>نمونه و غیررسمی</b> محاسبه می‌شه.</div>
+          <div class="quick-head"><span>پرطرفدارها</span><span class="quick-head-mark">↘</span></div>
+          <div id="quickDestinations" class="quick-chips"></div>
+          <div class="route-result" id="routeResult" aria-live="polite"><div class="empty-route"><span class="route-flag">↝</span><strong>هنوز مقصدی انتخاب نکردی</strong><small>یک ساختمان یا سوال رو انتخاب کن تا مسیرش رو نشون بدم.</small></div></div>
+          <div class="panel-footer">💡 روی مسیر رنگی نقشه کلیک کن تا دوباره مقصد رو ببینی.</div>
+        </aside>
+        <div class="map-column">
+          <div class="map-topbar"><div class="breadcrumbs" id="breadcrumbs"></div><div class="map-actions"><button id="zoomIn" type="button" class="icon-btn" title="بزرگ‌نمایی" aria-label="بزرگ‌نمایی">＋</button><button id="zoomOut" type="button" class="icon-btn" title="کوچک‌نمایی" aria-label="کوچک‌نمایی">−</button><button id="resetView" type="button" class="icon-btn" title="نمای کامل" aria-label="نمای کامل">⤢</button></div></div>
+          <div class="map-board" id="mapBoard">
+            <div class="map-floating-label" id="mapFloatingLabel"><span class="live-dot"></span> <span id="mapLevelLabel">نمای کلی دانشگاه</span></div>
+            <div class="svg-stage" id="svgStage"><svg id="campusMap" viewBox="0 0 1200 650" role="img" aria-label="نقشه کدنویسی شده محوطه دانشگاه با ساختمان‌های قابل کلیک"></svg></div>
+            <div class="map-tooltip" id="mapTooltip" role="status" hidden></div>
+            <div class="map-popup" id="mapPopup" hidden></div>
+            <div class="map-bottom-hint" id="mapHint">نقشه شماتیک و جانمایی نمایشی • برای مسیر رسمی به برداشت میدانی نیاز است</div>
+            <div class="map-compass"><span>↑</span> شـمـال <small>نمایشی</small></div>
+          </div>
+          <div class="map-footer"><div class="legend" id="mapLegend"></div><button type="button" class="text-link" id="showAllBtn">همه فازها و ساختمان‌ها ←</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container explore-section" id="explore-section"><div class="section-head"><div><div class="section-kicker">۰۲ / گشت‌وگذار</div><h2>هر فاز، یه دنیای تازه <span class="heading-spark">✦</span></h2><p>از نمای کلی شروع کن و مرحله به مرحله به طبقه و اتاق برس.</p></div></div><div class="phase-grid" id="phaseCards"></div></section>
+
+    <section class="section container faq-section" id="faq-section"><div class="faq-layout"><div class="faq-main"><div class="section-kicker">۰۳ / سوال‌های پرتکرار</div><h2>سوال داری؟<br><em>اینجا جوابشه.</em></h2><p>سوال‌های معمول روز اول رو انتخاب کن تا هم جواب بگیری و هم مقصد روی نقشه باز بشه.</p><div class="faq-search-wrap"><span>⌕</span><input id="faqSearch" type="search" placeholder="مثلا دفتر آموزش کجاست؟" aria-label="جست‌وجوی سوالات متداول"></div><div id="faqList" class="faq-list"></div></div><div class="faq-decoration"><img src="assets/bird-thinking.webp" alt="پرنده راهنما در حال فکر کردن"><div class="faq-quote">هیچ سوالی<br>کوچیک نیست! <span>♥</span></div><div class="faq-pink-circle"></div></div></div></section>
+
+    <section class="section container about-section" id="about-section"><div class="about-card"><div><div class="section-kicker">۰۴ / درباره پروژه</div><h2>راهِ من، برای روزهای اول</h2><p>پروژه طراحی اطلاعات، گرافیک محیطی و راه‌یابی دانشگاه ملی مهارت شریعتی. راه‌حل نهایی برای اجرا: یک نسخه آنلاین/آفلاین کم‌هزینه به همراه QR روی تابلوهای دانشگاه.</p><div class="feature-pills"><span>نقشه ماژولار</span><span>قابل ویرایش با داده واقعی</span><span>راهنمای طبقات</span><span>مسیریابی گرافی</span><span>FAQ مقصد محور</span></div></div><div class="about-side"><div class="about-number">۰۱<span> / نسخه نمایشی</span></div><p>پیش از راه‌اندازی عمومی باید اتاق‌ها، اسامی اساتید، مسیرهای باز و بسته و محل خدمات با مسئولان دانشگاه تطبیق داده شوند.</p><button type="button" class="btn btn-primary" id="aboutMapBtn">برگرد به نقشه ←</button></div></div></section>
+  </main>
+  <footer class="site-footer"><div class="container footer-inner"><div><strong>راهِ من</strong><span>با هم، دانشگاه رو راحت‌تر پیدا می‌کنیم.</span></div><span>نمونه اولیه آفلاین • نسخه MVP • طراحی برای دانشگاه شریعتی</span><a href="#top">↑ برگشت به بالا</a></div></footer>
+
+  <dialog class="detail-dialog" id="detailDialog" aria-labelledby="detailTitle"><div class="detail-shell"><div class="detail-top"><span class="detail-eyebrow" id="detailEyebrow">جزئیات</span><button class="icon-btn" type="button" id="closeDetail" aria-label="بستن">✕</button></div><div id="detailContent"></div></div></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
