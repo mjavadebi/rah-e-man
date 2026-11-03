@@ -16,3 +16,9 @@
 /* A map larger than the phone viewport is intentional: map labels remain legible.
    The SVG can be panned horizontally by touch while staying a real UI component. */
 @media(max-width:580px){.svg-stage{height:391px;justify-content:flex-start;overflow-x:auto;overflow-y:hidden;direction:ltr;scrollbar-width:thin;scrollbar-color:#A8C9DA transparent}.map-board{min-height:391px}.svg-stage svg{width:720px;min-width:720px;max-width:none;height:391px;flex:none}.map-bottom-hint{max-width:calc(100% - 20px);font-size:8px}}
+
+/* Survey 2026-11: accessible hover and focus for interactive SVG zones. */
+.campus-zone polygon{transition:fill-opacity .18s ease,stroke-width .18s ease,filter .18s ease}
+.campus-zone:hover polygon,.campus-zone:focus-visible polygon,.campus-zone.active polygon{fill-opacity:.76;stroke-width:5;filter:drop-shadow(0 5px 5px #07509B22)}
+.campus-zone:focus-visible{outline:none}
+.campus-zone:focus-visible circle{stroke:#243748;stroke-width:5}
