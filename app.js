@@ -8,30 +8,30 @@
  const state={origin:'gate',dest:null,route:[],viewBox:[0,0,1200,650],popup:null,tooltip:null};
  const svg=$('campusMap');if(!svg)return;
  const ns='http://www.w3.org/2000/svg';
- const polyDefs={p1:'728,172 1035,98 1165,232 1155,472 740,535 703,365',p2:'492,238 725,170 746,523 503,534 448,371',p3:'290,304 490,239 503,534 292,546 240,394',p4:'63,386 285,306 285,546 137,585 43,470'};
- const labels={p1:[927,220],p2:[610,249],p3:[351,257],p4:[149,359]};
- const phaseCenters={p1:[925,330],p2:[600,342],p3:[377,359],p4:[165,425]};
- const roadEdges=[['gate','main'],['main','center'],['main','east'],['east','farEast'],['center','mid'],['mid','artCross'],['artCross','artQuad'],['artQuad','west'],['west','farWest'],['center','northMid'],['northMid','northEast'],['northEast','east'],['northMid','northWest'],['northWest','artQuad'],['west','southWest'],['southWest','artCross'],['mid','p2node'],['artCross','artStudio'],['p3node','toranj'],['east','p1node']];
- const terrainTrees=[[1037,165],[1082,175],[1121,250],[1095,398],[971,206],[990,271],[845,157],[778,140],[709,177],[695,267],[641,217],[520,199],[469,185],[281,355],[204,437],[140,455],[327,466],[422,489],[581,479],[763,475],[1082,386],[912,451],[933,262],[1112,336],[603,164],[437,383],[742,285]];
- function line(a,b){const p=db.nodes[a],q=db.nodes[b];return p&&q?`M${p[0]} ${p[1]} L${q[0]} ${q[1]}`:''}
- const roofs=(b)=>{let x=b.x,y=b.y,w=b.w,h=b.h;return `<path class="building-roof" d="M ${x-w/2+12} ${y-h/2+15} H ${x+w/2-12} M ${x-w/2+12} ${y+h/2-14} H ${x+w/2-12}"/>`};
- function buildingShape(b){let phase=byPhase(b.phase);let fill=phase?phase.color:(b.id==='greenhouse'?'#91B9A2':b.id==='pool'?'#7BC3CF':'#E0B778');let x=b.x,y=b.y,w=b.w,h=b.h;
-  let geom=b.shape==='ellipse'?`<ellipse cx="${x}" cy="${y}" rx="${w/2}" ry="${h/2}"/>`:`<rect x="${x-w/2}" y="${y-h/2}" width="${w}" height="${h}" rx="8"/>`;
-  return `<g class="svg-building ${state.dest===b.id?'active':''}" tabindex="0" role="button" aria-label="اطلاعات ${esc(b.name)}؛ برای مشاهده صفحه اختصاصی کلیک کنید" data-building="${esc(b.id)}" fill="${fill}">${geom}${b.shape==='ellipse'?'':roofs(b)}</g><text x="${x}" y="${y+h/2+22}" text-anchor="middle" class="building-label">${esc(b.name)}</text>`;
- }
- function campusBase(){const park=`<g>${[...Array(19)].map((_,i)=>{const x=931+(i%5)*37+(i%2)*3,y=130+Math.floor(i/5)*40;return `<circle cx="${x}" cy="${y}" r="${9+(i*3)%7}" fill="${i%3===0?'#9FCC8E':'#B0D5A3'}" opacity=".75"/>`}).join('')}</g>`;
-  return `<defs><pattern id="svg-grid" patternUnits="userSpaceOnUse" width="48" height="48"><path d="M48 0H0V48" fill="none" stroke="#CEDFE1" stroke-width=".7" opacity=".4"/></pattern></defs>
-  <rect width="1200" height="650" fill="#F4F9F8"/><rect width="1200" height="650" fill="url(#svg-grid)"/>
-  <path class="campus-outline" d="M33 415 L76 371 L183 334 L310 288 L445 228 L605 181 L791 118 L988 52 Q1087 74 1156 166 Q1200 247 1185 417 L1102 506 L920 562 L756 579 L607 610 L392 618 L206 593 L112 585 Z"/>
-  <path d="M985 62Q1100 91 1150 176Q1170 241 1145 304L927 290L876 183Z" fill="#D6E9CA" opacity=".87"/>
-  <g>${db.phases.map(p=>`<polygon class="phase-region" data-phase="${p.id}" role="button" tabindex="0" aria-label="مشاهده صفحه ${p.name}" points="${polyDefs[p.id]}" fill="${p.color}" fill-opacity="${p.id==='p3'?'.33':'.23'}" stroke="${p.color}" stroke-opacity=".65"/>`).join('')}</g>
-  <g>${roadEdges.map(([a,b])=>`<path class="campus-internal" d="${line(a,b)}"/>`).join('')}</g>
-  <g>${roadEdges.map(([a,b])=>`<path class="campus-internal-center" d="${line(a,b)}"/>`).join('')}</g>
-  ${park}<g>${terrainTrees.map(([x,y],i)=>`<circle class="grass-tree ${i%3===0?'dark':''}" cx="${x}" cy="${y}" r="${i%4===0?11:8}" opacity=".95"/>`).join('')}</g>
-  <g>${db.phases.map(p=>`<g><rect class="phase-caption-bg" x="${labels[p.id][0]-51}" y="${labels[p.id][1]-30}" width="102" height="48" rx="18"/><text class="phase-label" x="${labels[p.id][0]}" y="${labels[p.id][1]-4}" text-anchor="middle">${esc(p.name)}</text><text class="phase-mini" x="${labels[p.id][0]}" y="${labels[p.id][1]+12}" text-anchor="middle">${esc(p.tag)}</text></g>`).join('')}</g>
-  <g>${db.buildings.map(buildingShape).join('')}</g>
-  <g><circle cx="770" cy="552" r="16" fill="white" stroke="#07509B" stroke-width="4"/><path d="M770 542v18m-9-10 9-9 9 9" fill="none" stroke="#07509B" stroke-width="3" stroke-linecap="round"/><text x="769" y="591" text-anchor="middle" class="building-label" style="font-size:16px">ورودی اصلی</text></g>
-  <g><text x="1012" y="97" text-anchor="middle" style="font-size:18px;font-weight:900;fill:#5D8369">فضای سبز</text><text x="999" y="113" text-anchor="middle" style="font-size:11px;fill:#6A9676">محدوده نمایشی</text></g>`;
+ /* Survey-updated SVG; all polygons are authored components, not embedded images. */
+ function line(a,b){const p=db.nodes[a],q=db.nodes[b];return p&&q?`M${p[0]} ${p[1]} L${q[0]} ${q[1]}`:'';}
+ function campusBase(){
+ const walkways=db.edges.map(([a,b])=>line(a,b)).filter(Boolean);
+ const areaSvg=(db.zones||[]).map(z=>{
+ const active=state.dest===z.destination;
+ return `<g class="campus-zone ${active?'active':''}" data-zone="${esc(z.id)}" tabindex="0" role="button" aria-label="${esc(z.name)}؛ جزئیات و مسیر" style="cursor:pointer">
+   <polygon points="${z.points}" fill="${z.color}" fill-opacity=".46" stroke="${z.color}" stroke-width="${active?5:2.5}" stroke-linejoin="round"/>
+   <circle cx="${db.nodes[z.node][0]}" cy="${db.nodes[z.node][1]-6}" r="18" fill="#fff" stroke="${z.color}" stroke-width="3"/>
+   <text x="${db.nodes[z.node][0]}" y="${db.nodes[z.node][1]}" text-anchor="middle" font-size="17" font-weight="900" fill="#243748">${z.number}</text>
+   <text class="building-label" x="${db.nodes[z.node][0]}" y="${db.nodes[z.node][1]+35}" text-anchor="middle" style="font-size:14px;font-weight:900;paint-order:stroke;stroke:#fff;stroke-width:4px">${esc(z.name)}</text>
+   </g>`;
+ }).join('');
+ const trees=[[927,155],[990,191],[1050,221],[1089,280],[586,194],[572,235],[455,236],[559,374],[633,322],[602,444],[717,441],[919,252],[1015,311],[255,380],[202,440]].map(([x,y])=>`<g fill="#91B9A2"><circle cx="${x}" cy="${y}" r="12"/><circle cx="${x-10}" cy="${y+5}" r="8"/><rect x="${x-2}" y="${y+7}" width="4" height="12" fill="#70997D"/></g>`).join('');
+ return `<defs><pattern id="survey-grid" width="46" height="46" patternUnits="userSpaceOnUse"><path d="M46 0H0V46" stroke="#D9E5DE" stroke-width=".6" fill="none"/></pattern></defs>
+ <rect width="1200" height="650" fill="#F8EDE4"/><rect width="1200" height="650" fill="url(#survey-grid)"/>
+ <path d="M18 393 L271 286 L422 236 L582 178 L806 93 L954 39 Q1056 72 1147 185 L1172 406 L1051 491 L878 545 L722 557 L530 598 L283 583 L116 559 Z" fill="#E6F0DE" stroke="#668E6C" stroke-width="5" stroke-linejoin="round"/>
+ <path d="M887 96 Q1050 64 1130 188 L1140 325 L928 307 L880 218 Z" fill="#D3E8C4"/>${trees}
+ <g>${walkways.map(s=>`<path d="${s}" fill="none" stroke="#BAC7BD" stroke-width="21" stroke-linecap="round" stroke-linejoin="round"/>`).join('')}</g>
+ <g>${walkways.map(s=>`<path d="${s}" fill="none" stroke="#FFFFFF" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>`).join('')}</g>
+ ${areaSvg}
+ <g><circle cx="684" cy="486" r="15" fill="#07509B" stroke="#fff" stroke-width="4"/><path d="M684 477v17m-8-9 8-8 8 8" stroke="#fff" stroke-width="3" fill="none" stroke-linejoin="round"/><text x="684" y="520" class="building-label" text-anchor="middle">ورودی اصلی</text></g>
+ <text x="999" y="264" fill="#5D8369" text-anchor="middle" font-size="23" font-weight="900">فضای سبز</text>
+ <text x="370" y="613" fill="#697B84" font-size="12">محدوده‌ها طبق نقشه دانشجو · مسیرهای سفید به‌صورت شماتیک بازسازی شده‌اند</text>`;
  }
  function shortestPath(origin,target){
   const dist={},prev={},visited=new Set();Object.keys(db.nodes).forEach(k=>dist[k]=Infinity);if(!db.nodes[origin]||!db.nodes[target])return [];
@@ -51,6 +51,11 @@
    let b=byId(el.dataset.building);el.addEventListener('mouseenter',e=>tooltip(e,b.name,b.summary));el.addEventListener('mousemove',moveTooltip);el.addEventListener('mouseleave',hideTooltip);
    el.addEventListener('click',()=>window.location.href=`place.html?id=${encodeURIComponent(b.id)}`);
    el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();window.location.href=`place.html?id=${encodeURIComponent(b.id)}`;}});
+  });
+  svg.querySelectorAll('[data-zone]').forEach(el=>{const z=db.zones.find(t=>t.id===el.dataset.zone);if(!z)return;
+   el.addEventListener('mouseenter',e=>tooltip(e,z.name,z.summary));el.addEventListener('mousemove',moveTooltip);el.addEventListener('mouseleave',hideTooltip);
+   const navigate=()=>{window.location.href=z.phase?`phase.html?id=${encodeURIComponent(z.phase)}`:`place.html?id=${encodeURIComponent(z.destination)}`;};
+   el.addEventListener('click',navigate);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();navigate();}});
   });
   svg.querySelectorAll('[data-phase]').forEach(el=>{
    let p=byPhase(el.dataset.phase);el.addEventListener('mouseenter',e=>tooltip(e,p.name,p.description));el.addEventListener('mousemove',moveTooltip);el.addEventListener('mouseleave',hideTooltip);
@@ -74,7 +79,7 @@
   if(scroll)document.getElementById('map-section').scrollIntoView({behavior:'smooth',block:'start'});}
 
  function renderRoute(){let el=$('routeResult');if(!state.dest){el.className='route-result';el.innerHTML='<div class="empty-route"><span class="route-flag">↝</span><strong>مقصدی انتخاب نشده</strong></div>';return;}
-  const b=byId(state.dest);const origin=db.origins.find(o=>o.id===state.origin);el.className='route-result active';el.innerHTML=`<div class="route-header"><div class="route-icon">🧭</div><div><h4>مسیر پیشنهادی تا ${esc(b.name)}</h4><small>محاسبه‌شده روی شبکه مسیرهای نمونه</small></div></div><div class="route-dash"><span>${esc(origin?.label||'مبدا')}</span><span>← ←</span><span>${esc(b.name)}</span></div><div class="route-steps">${state.route.length?`مسیر شامل ${state.route.length} نقطه اتصال در مدل نمایشی است. کوتاه‌ترین مسیر در همین شبکه ترسیم‌شده انتخاب شده، نه مسیر تاییدشده محوطه واقعی.`:'مسیر بین این دو نقطه در شبکه نمونه پیدا نشد.'}</div><button type="button" id="routeDetails">جزئیات، طبقات و اساتید ←</button>`;
+  const b=byId(state.dest);const origin=db.origins.find(o=>o.id===state.origin);el.className='route-result active';el.innerHTML=`<div class="route-header"><div class="route-icon">🧭</div><div><h4>مسیر پیشنهادی تا ${esc(b.name)}</h4><small>محاسبه‌شده روی شبکه مسیرهای نمونه</small></div></div><div class="route-dash"><span>${esc(origin?.label||'مبدا')}</span><span>← ←</span><span>${esc(b.name)}</span></div><div class="route-steps">${state.route.length?`مسیر شامل ${state.route.length} نقطه اتصال در مدل شماتیک است. کوتاه‌ترین مسیر در همین شبکه ترسیم‌شده انتخاب شده، نه مسیر تاییدشده محوطه واقعی.`:'مسیر بین این دو نقطه در شبکه نمونه پیدا نشد.'}</div><button type="button" id="routeDetails">جزئیات، طبقات و اساتید ←</button>`;
   $('routeDetails').onclick=()=>location.href=`place.html?id=${encodeURIComponent(b.id)}`;
  }
  function searchItems(q){const nq=norm(q);if(!nq)return [];
@@ -87,9 +92,9 @@
  function renderPhaseCards(){const icons=['📚','📸','🎨','🧩'];$('phaseCards').innerHTML=db.phases.map((p,i)=>`<article class="phase-card" style="--phase:${p.color};--phaseSoft:${p.color}33"><div class="phase-card-top"><span class="phase-number">${p.number}</span><div class="phase-icon">${icons[i]}</div></div><h3>${esc(p.name)}</h3><p>${esc(p.description)}</p><div class="phase-card-foot"><button type="button" data-open-phase="${p.id}">دیدن ساختمان‌ها ←</button><small>${p.buildings.length} بخش در MVP</small></div></article>`).join('');$('phaseCards').querySelectorAll('[data-open-phase]').forEach(b=>b.onclick=()=>location.href=`phase.html?id=${b.dataset.openPhase}`);}
  function renderFAQ(q=''){const filter=norm(q);const faqs=db.faq.filter(x=>!filter||norm(x.q+' '+x.a+' '+x.tags.join(' ')).includes(filter));$('faqList').innerHTML=faqs.length?faqs.map(f=>`<details class="faq-item"><summary><span>${esc(f.q)}</span><span class="faq-plus">+</span></summary><div class="faq-answer">${esc(f.a)}<br><button type="button" data-faq-dest="${esc(f.destination)}">نمایش مقصد و مسیر روی نقشه ←</button>${f.openFaculty?` <a href="place.html?id=toranj#faculty" style="color:var(--blue);padding-right:9px;font-size:10px">فهرست اساتید ↗</a>`:''}</div></details>`).join(''):'<div class="notice-box">سوالی پیدا نشد. می‌تونی نام فضا رو در جست‌وجوی نقشه وارد کنی.</div>';
   $('faqList').querySelectorAll('[data-faq-dest]').forEach(btn=>btn.onclick=()=>go(btn.dataset.faqDest));}
- function renderQuick(){const ids=['toranj','education','art-office','photography','library','printshop'];$('quickDestinations').innerHTML=ids.map(id=>`<button type="button" class="quick-chip" data-quick="${id}">${esc(byId(id).name)}</button>`).join('');$('quickDestinations').querySelectorAll('[data-quick]').forEach(btn=>btn.onclick=()=>go(btn.dataset.quick));}
+ function renderQuick(){const ids=['toranj','cafeteria','management','dorms','sports','pool'];$('quickDestinations').innerHTML=ids.map(id=>`<button type="button" class="quick-chip" data-quick="${id}">${esc(byId(id).name)}</button>`).join('');$('quickDestinations').querySelectorAll('[data-quick]').forEach(btn=>btn.onclick=()=>go(btn.dataset.quick));}
  function renderOrigins(){const s=$('originSelect');s.innerHTML=db.origins.map(x=>`<option value="${x.id}">${esc(x.label)}</option>`).join('');s.value=state.origin;s.onchange=()=>{state.origin=s.value;if(state.dest)go(state.dest,false);};}
- function renderLegend(){$('mapLegend').innerHTML=db.phases.map(p=>`<span class="legend-item"><i class="legend-dot" style="background:${p.color}"></i>${esc(p.name)}</span>`).join('');}
+ function renderLegend(){$('mapLegend').innerHTML=[...db.phases].map(p=>`<span class="legend-item"><i class="legend-dot" style="background:${p.color}"></i>${esc(p.name)}</span>`).join('');}
  function renderCrumbs(){$('breadcrumbs').innerHTML='<button type="button" class="crumb active">🏠 دانشگاه / نقشه کلی</button>';$('mapLevelLabel').textContent='نمای کلی دانشگاه';}
  function setZoom(factor){let [x,y,w,h]=state.viewBox;const nw=Math.max(350,Math.min(1200,w*factor)),nh=nw*650/1200;state.viewBox=[x+(w-nw)/2,y+(h-nh)/2,nw,nh];draw();}
  function resetZoom(){state.viewBox=[0,0,1200,650];draw();}
