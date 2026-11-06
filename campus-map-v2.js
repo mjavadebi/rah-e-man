@@ -42,11 +42,12 @@
     {id:"a5",name:"آتلیه ۵",x:871,y:454,w:51,h:40,target:"art-studio",kind:"studio"},
     {id:"a6",name:"آتلیه ۶",x:927,y:454,w:51,h:40,target:"art-studio",kind:"studio"},
     {id:"it",name:"IT",x:767,y:424,w:42,h:39,phase:"p3",kind:"office"},
-    {id:"artoffice",name:"دفتر گروه",x:1020,y:424,w:48,h:72,target:"art-office",kind:"office"},
-    {id:"library",name:"کتابخانه",x:985,y:460,w:57,h:38,target:"library",kind:"service"},
-    {id:"support",name:"معاونت",x:986,y:506,w:75,h:35,phase:"p3",kind:"office"},
-    {id:"print",name:"کارگاه چاپ",x:1055,y:485,w:74,h:50,target:"printshop",kind:"studio"},
-    {id:"multipurpose",name:"سالن چندمنظوره",x:1111,y:470,w:105,h:74,phase:"p3",kind:"service",large:true}
+    {id:"toranj",name:"ترنج",x:813,y:461,w:61,h:39,target:"toranj",kind:"education"}, // Approximate marker; position not field-verified.
+    {id:"artoffice",name:"دفتر گروه",x:1026,y:401,w:48,h:70,target:"art-office",kind:"office"},
+    {id:"library",name:"کتابخانه",x:985,y:462,w:57,h:38,target:"library",kind:"service"},
+    {id:"support",name:"معاونت",x:993,y:499,w:66,h:27,phase:"p3",kind:"office"},
+    {id:"print",name:"کارگاه چاپ",x:1060,y:465,w:74,h:41,target:"printshop",kind:"studio"},
+    {id:"multipurpose",name:"سالن چندمنظوره",x:1113,y:391,w:105,h:70,phase:"p3",kind:"service",large:true}
   ];
   const roadContours=[
     // Main walkable loop visible in the annotated drawing (approximate trace).
