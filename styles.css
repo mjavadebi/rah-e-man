@@ -26,13 +26,27 @@
 /* Rah-e-Man | v2 illustrated campus map · native SVG, no raster overlays */
 .map-board{background:#F8EDE4}
 .map-building{cursor:pointer;outline:none}
-.map-building .map-building-body{stroke:#F8EDE4;stroke-width:2.4;filter:url(#map-card-shadow);transition:stroke .16s,stroke-width .16s,filter .16s,transform .16s}
-.map-building .map-building-shadow{fill:#244968;opacity:.16;pointer-events:none}
-.map-building .map-building-text{fill:#FFF9F3;font-family:inherit;font-weight:900;letter-spacing:0;direction:rtl;unicode-bidi:plaintext;pointer-events:none}
-.map-building:hover .map-building-body,.map-building:focus-visible .map-building-body,.map-building.active .map-building-body{
-stroke:#E8A9BA;stroke-width:4;filter:drop-shadow(0 6px 8px #07509B55)
+.map-building .map-building-body{
+ stroke:none;stroke-width:0;
+ filter:drop-shadow(0 2px 2px #36546A17);
+ transition:filter .18s ease,opacity .18s ease
 }
-.map-building:focus-visible .map-building-body{stroke:#243748;stroke-width:5}
+.map-building .map-building-roof{opacity:.68;transition:opacity .18s ease}
+.map-building .map-building-text{
+ fill:#314953;font-family:inherit;font-weight:850;
+ letter-spacing:0;direction:rtl;unicode-bidi:plaintext;pointer-events:none
+}
+.map-building:hover .map-building-body,
+.map-building:focus-visible .map-building-body,
+.map-building.active .map-building-body{
+ stroke:none;stroke-width:0;
+ filter:brightness(1.055) drop-shadow(0 4px 5px #36546A2A)
+}
+.map-building:hover .map-building-roof,
+.map-building:focus-visible .map-building-roof{opacity:.95}
+.map-building:focus-visible .map-building-body{
+ stroke:none;filter:brightness(1.06) drop-shadow(0 0 5px #07509B88)
+}
 .campus-zone polygon{transition:fill-opacity .18s,stroke-opacity .18s;cursor:pointer}
 .campus-zone:hover polygon,.campus-zone:focus-visible polygon,.campus-zone.active polygon{
 fill-opacity:.19;stroke-width:3;stroke-opacity:.65;filter:none;outline:none
