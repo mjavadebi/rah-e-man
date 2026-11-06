@@ -96,15 +96,36 @@
     const isActive=active && b && active===b.id;
     const big=!!feature.large;
     const x=feature.x-feature.w/2,y=feature.y-feature.h/2;
-    const fill=feature.kind==="service"?"#1A608C":feature.kind==="office"?"#285C82":feature.kind==="residence"?"#376F96":P.blue;
-    const lineCount=labelLines(feature.name).length;
-    const font=big?15:feature.w<52?10.3:12.5;
-    const baseline=feature.y + (lineCount===1?4:-5);
-    const ts=labelLines(feature.name).map((s,i)=>'<tspan x="'+feature.x+'" dy="'+(i?font*1.28:0)+'">'+text(s)+'</tspan>').join("");
+    // Gentle, phase-inspired colors: like the earlier soft building footprints.
+    // Buildings remain independent SVG groups, never flattened into an image.
+    const colors={
+      residence:"#C8D9CB",education:"#B9D5DC",studio:"#EBD1D8",
+      office:"#CDD8DB",service:"#E9D9BE"
+    };
+    const roofInk={
+      residence:"#8FAE9C",education:"#83ADBE",studio:"#CEA4B0",
+      office:"#A1B7BF",service:"#C8B38E"
+    };
+    const fill=colors[feature.kind]||"#B9D5DC";
+    const roofColor=roofInk[feature.kind]||"#83ADBE";
+    // Short Persian building names wrap on small footprints instead of overflowing.
+    let lines=labelLines(feature.name);
+    if(lines.length===1 && feature.w<=56){
+      const m=feature.name.match(/^(خوابگاه|آتلیه|کلاس)\s+(.+)$/);
+      if(m)lines=[m[1],m[2]];
+    }
+    const font=big?14.5:feature.w<53?9.2:feature.w<75?10.9:12.5;
+    const baseline=feature.y - ((lines.length-1)*font*.6) + font*.29;
+    const ts=lines.map((s,i)=>'<tspan x="'+feature.x+'" dy="'+(i?font*1.25:0)+'">'+text(s)+'</tspan>').join("");
+    const radius=big?9:6;
+    const inset=Math.max(5,Math.min(feature.w*.17,11));
+    const roof='<g class="map-building-roof" pointer-events="none">'+
+      '<path d="M '+(x+inset)+' '+(y+7)+' H '+(x+feature.w-inset)+'" stroke="'+roofColor+'" stroke-width="1.5" stroke-linecap="round"/>'+
+      '<path d="M '+(x+inset)+' '+(y+feature.h-7)+' H '+(x+feature.w-inset)+'" stroke="'+roofColor+'" stroke-width="1.25" stroke-linecap="round" stroke-opacity=".65"/>'+
+      '</g>';
     return '<g class="map-building '+(isActive?'active ':'')+'map-building--'+feature.kind+'" tabindex="0" role="button" aria-label="'+text(feature.name)+'، مشاهده جزئیات" '+accessible+'>'+
-      '<rect class="map-building-shadow" x="'+(x+3)+'" y="'+(y+5)+'" width="'+feature.w+'" height="'+feature.h+'" rx="'+(big?8:6)+'"/>'+
-      '<rect class="map-building-body" x="'+x+'" y="'+y+'" width="'+feature.w+'" height="'+feature.h+'" rx="'+(big?8:6)+'" fill="'+fill+'"/>'+
-      '<path d="M '+(x+6)+' '+(y+6)+' H '+(x+feature.w-6)+'" stroke="#A7D1E8" stroke-opacity=".56" stroke-width="2" stroke-linecap="round" pointer-events="none"/>'+
+      '<rect class="map-building-body" x="'+x+'" y="'+y+'" width="'+feature.w+'" height="'+feature.h+'" rx="'+radius+'" fill="'+fill+'"/>'+
+      roof+
       '<text class="map-building-text" x="'+feature.x+'" y="'+baseline+'" font-size="'+font+'" text-anchor="middle" font-weight="800" pointer-events="none">'+ts+'</text>'+
       '</g>';
   }
