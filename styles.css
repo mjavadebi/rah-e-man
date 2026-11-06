@@ -22,3 +22,33 @@
 .campus-zone:hover polygon,.campus-zone:focus-visible polygon,.campus-zone.active polygon{fill-opacity:.76;stroke-width:5;filter:drop-shadow(0 5px 5px #07509B22)}
 .campus-zone:focus-visible{outline:none}
 .campus-zone:focus-visible circle{stroke:#243748;stroke-width:5}
+
+/* Rah-e-Man | v2 illustrated campus map · native SVG, no raster overlays */
+.map-board{background:#F8EDE4}
+.map-building{cursor:pointer;outline:none}
+.map-building .map-building-body{stroke:#F8EDE4;stroke-width:2.4;filter:url(#map-card-shadow);transition:stroke .16s,stroke-width .16s,filter .16s,transform .16s}
+.map-building .map-building-shadow{fill:#244968;opacity:.16;pointer-events:none}
+.map-building .map-building-text{fill:#FFF9F3;font-family:inherit;font-weight:900;letter-spacing:0;direction:rtl;unicode-bidi:plaintext;pointer-events:none}
+.map-building:hover .map-building-body,.map-building:focus-visible .map-building-body,.map-building.active .map-building-body{
+stroke:#E8A9BA;stroke-width:4;filter:drop-shadow(0 6px 8px #07509B55)
+}
+.map-building:focus-visible .map-building-body{stroke:#243748;stroke-width:5}
+.campus-zone polygon{transition:fill-opacity .18s,stroke-opacity .18s;cursor:pointer}
+.campus-zone:hover polygon,.campus-zone:focus-visible polygon,.campus-zone.active polygon{
+fill-opacity:.19;stroke-width:3;stroke-opacity:.65;filter:none;outline:none
+}
+.map-tree,.garden-plot,.map-pedestrian,.map-pedestrian-center{pointer-events:none}
+.garden-plot{fill:#C7DCBB;stroke:#B2CEA9;stroke-width:1.2}
+.map-pedestrian{fill:none;stroke:#E8A9BA;stroke-width:17;stroke-linecap:round;stroke-linejoin:round}
+.map-pedestrian--graph{stroke:#E8A9BA;stroke-width:11;stroke-opacity:.87}
+.map-pedestrian-center{fill:none;stroke:#FFF9F3;stroke-width:1.7;stroke-dasharray:3 8;stroke-linecap:round}
+.map-watermark{fill:#8D777A;font-size:12px;font-weight:750;pointer-events:none}
+.route-line-halo{stroke:#FFF9F3;stroke-width:16;opacity:.98}
+.route-line{stroke:#07509B;stroke-width:7;stroke-dasharray:12 8}
+.map-popup{border-color:#E8A9BA;background:#FFF9F3}
+.map-tooltip{background:#243748}
+@media(max-width:580px){
+ .map-board{min-height:510px}
+ .svg-stage{height:510px}
+ .svg-stage svg{width:945px;min-width:945px;height:510px}
+}
