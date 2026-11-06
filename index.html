@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="styles.css">
   <script src="data.js" defer></script>
   <script src="survey-2026.js" defer></script>
+  <script src="campus-map-v2.js" defer></script>
   <script src="app.js" defer></script>
 </head>
 <body>
@@ -63,10 +64,10 @@
           <div class="map-topbar"><div class="breadcrumbs" id="breadcrumbs"></div><div class="map-actions"><button id="zoomIn" type="button" class="icon-btn" title="بزرگ‌نمایی" aria-label="بزرگ‌نمایی">＋</button><button id="zoomOut" type="button" class="icon-btn" title="کوچک‌نمایی" aria-label="کوچک‌نمایی">−</button><button id="resetView" type="button" class="icon-btn" title="نمای کامل" aria-label="نمای کامل">⤢</button></div></div>
           <div class="map-board" id="mapBoard">
             <div class="map-floating-label" id="mapFloatingLabel"><span class="live-dot"></span> <span id="mapLevelLabel">نمای کلی دانشگاه</span></div>
-            <div class="svg-stage" id="svgStage"><svg id="campusMap" viewBox="0 0 1200 650" role="img" aria-label="نقشه کدنویسی شده محوطه دانشگاه با ساختمان‌های قابل کلیک"></svg></div>
+            <div class="svg-stage" id="svgStage"><svg id="campusMap" viewBox="0 0 1200 650" role="img" aria-label="نقشه تصویرسازی‌شده و ماژولار SVG با ساختمان‌ها و مسیرهای پیاده قابل انتخاب"></svg></div>
             <div class="map-tooltip" id="mapTooltip" role="status" hidden></div>
             <div class="map-popup" id="mapPopup" hidden></div>
-            <div class="map-bottom-hint" id="mapHint">نقشه شماتیک و جانمایی نمایشی • برای مسیر رسمی به برداشت میدانی نیاز است</div>
+            <div class="map-bottom-hint" id="mapHint">نقشه بازطراحی‌شده • مسیرها شماتیک‌اند و به برداشت میدانی نیاز دارند</div>
             <div class="map-compass"><span>↑</span> شـمـال <small>نمایشی</small></div>
           </div>
           <div class="map-footer"><div class="legend" id="mapLegend"></div><button type="button" class="text-link" id="showAllBtn">همه فازها و ساختمان‌ها ←</button></div>
