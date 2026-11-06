@@ -8,30 +8,10 @@
  const state={origin:'gate',dest:null,route:[],viewBox:[0,0,1200,650],popup:null,tooltip:null};
  const svg=$('campusMap');if(!svg)return;
  const ns='http://www.w3.org/2000/svg';
- /* Survey-updated SVG; all polygons are authored components, not embedded images. */
- function line(a,b){const p=db.nodes[a],q=db.nodes[b];return p&&q?`M${p[0]} ${p[1]} L${q[0]} ${q[1]}`:'';}
+ /* Illustrated map v2 stays a separate, data-driven SVG component. */
  function campusBase(){
- const walkways=db.edges.map(([a,b])=>line(a,b)).filter(Boolean);
- const areaSvg=(db.zones||[]).map(z=>{
- const active=state.dest===z.destination;
- return `<g class="campus-zone ${active?'active':''}" data-zone="${esc(z.id)}" tabindex="0" role="button" aria-label="${esc(z.name)}؛ جزئیات و مسیر" style="cursor:pointer">
-   <polygon points="${z.points}" fill="${z.color}" fill-opacity=".46" stroke="${z.color}" stroke-width="${active?5:2.5}" stroke-linejoin="round"/>
-   <circle cx="${db.nodes[z.node][0]}" cy="${db.nodes[z.node][1]-6}" r="18" fill="#fff" stroke="${z.color}" stroke-width="3"/>
-   <text x="${db.nodes[z.node][0]}" y="${db.nodes[z.node][1]}" text-anchor="middle" font-size="17" font-weight="900" fill="#243748">${z.number}</text>
-   <text class="building-label" x="${db.nodes[z.node][0]}" y="${db.nodes[z.node][1]+35}" text-anchor="middle" style="font-size:14px;font-weight:900;paint-order:stroke;stroke:#fff;stroke-width:4px">${esc(z.name)}</text>
-   </g>`;
- }).join('');
- const trees=[[927,155],[990,191],[1050,221],[1089,280],[586,194],[572,235],[455,236],[559,374],[633,322],[602,444],[717,441],[919,252],[1015,311],[255,380],[202,440]].map(([x,y])=>`<g fill="#91B9A2"><circle cx="${x}" cy="${y}" r="12"/><circle cx="${x-10}" cy="${y+5}" r="8"/><rect x="${x-2}" y="${y+7}" width="4" height="12" fill="#70997D"/></g>`).join('');
- return `<defs><pattern id="survey-grid" width="46" height="46" patternUnits="userSpaceOnUse"><path d="M46 0H0V46" stroke="#D9E5DE" stroke-width=".6" fill="none"/></pattern></defs>
- <rect width="1200" height="650" fill="#F8EDE4"/><rect width="1200" height="650" fill="url(#survey-grid)"/>
- <path d="M18 393 L271 286 L422 236 L582 178 L806 93 L954 39 Q1056 72 1147 185 L1172 406 L1051 491 L878 545 L722 557 L530 598 L283 583 L116 559 Z" fill="#E6F0DE" stroke="#668E6C" stroke-width="5" stroke-linejoin="round"/>
- <path d="M887 96 Q1050 64 1130 188 L1140 325 L928 307 L880 218 Z" fill="#D3E8C4"/>${trees}
- <g>${walkways.map(s=>`<path d="${s}" fill="none" stroke="#BAC7BD" stroke-width="21" stroke-linecap="round" stroke-linejoin="round"/>`).join('')}</g>
- <g>${walkways.map(s=>`<path d="${s}" fill="none" stroke="#FFFFFF" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>`).join('')}</g>
- ${areaSvg}
- <g><circle cx="684" cy="486" r="15" fill="#07509B" stroke="#fff" stroke-width="4"/><path d="M684 477v17m-8-9 8-8 8 8" stroke="#fff" stroke-width="3" fill="none" stroke-linejoin="round"/><text x="684" y="520" class="building-label" text-anchor="middle">ورودی اصلی</text></g>
- <text x="999" y="264" fill="#5D8369" text-anchor="middle" font-size="23" font-weight="900">فضای سبز</text>
- <text x="370" y="613" fill="#697B84" font-size="12">محدوده‌ها طبق نقشه دانشجو · مسیرهای سفید به‌صورت شماتیک بازسازی شده‌اند</text>`;
+  if(!window.RAHMAN_MAP)throw Error("Missing campus-map-v2.js");
+  return window.RAHMAN_MAP.render(db,state);
  }
  function shortestPath(origin,target){
   const dist={},prev={},visited=new Set();Object.keys(db.nodes).forEach(k=>dist[k]=Infinity);if(!db.nodes[origin]||!db.nodes[target])return [];
@@ -51,6 +31,19 @@
    let b=byId(el.dataset.building);el.addEventListener('mouseenter',e=>tooltip(e,b.name,b.summary));el.addEventListener('mousemove',moveTooltip);el.addEventListener('mouseleave',hideTooltip);
    el.addEventListener('click',()=>window.location.href=`place.html?id=${encodeURIComponent(b.id)}`);
    el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();window.location.href=`place.html?id=${encodeURIComponent(b.id)}`;}});
+  });
+  // Additional campus buildings are independent SVG modules. Where a room
+  // directory has not yet been surveyed, clicking opens the parent phase.
+  svg.querySelectorAll('[data-map-place]').forEach(el=>{
+   const feature=window.RAHMAN_MAP?.landmarks.find(x=>x.id===el.dataset.mapPlace);
+   if(!feature)return;
+   const summary='نام بنا از نقشه ارسالی؛ اطلاعات طبقات و اتاق‌ها هنوز در حال تکمیل است.';
+   el.addEventListener('mouseenter',e=>tooltip(e,feature.name,summary));
+   el.addEventListener('mousemove',moveTooltip);
+   el.addEventListener('mouseleave',hideTooltip);
+   const navigate=()=>{if(feature.phase && byPhase(feature.phase))window.location.href=`phase.html?id=${encodeURIComponent(feature.phase)}`;};
+   el.addEventListener('click',navigate);
+   el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();navigate();}});
   });
   svg.querySelectorAll('[data-zone]').forEach(el=>{const z=db.zones.find(t=>t.id===el.dataset.zone);if(!z)return;
    el.addEventListener('mouseenter',e=>tooltip(e,z.name,z.summary));el.addEventListener('mousemove',moveTooltip);el.addEventListener('mouseleave',hideTooltip);
